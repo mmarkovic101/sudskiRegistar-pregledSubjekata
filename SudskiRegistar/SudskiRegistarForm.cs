@@ -10,6 +10,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SudskiRegistar
 {
@@ -59,41 +60,61 @@ namespace SudskiRegistar
         private string IspisiSubjekt(Subjekt subjekt)
         {
             string ispis = "";
+            ispis += IspisiNadlezniSud(subjekt);
+            ispis += IspisiStatus(subjekt);
+            ispis += IspisiMbsOib(subjekt);
+            ispis += IspisiPravniOblik(subjekt);
+            ispis += IspisiImeTvrtke(subjekt);
+            ispis += IspisiTemeljniKapital(subjekt);
+            ispis += IspisiPredmetePoslovanja(subjekt);
+            return ispis;
+        }
 
-            //Nadlezni sud
-            ispis += $"Nadležni sud:\n{subjekt.sud_nadlezan.naziv}\n";
+        private static string IspisiNadlezniSud(Subjekt subjekt)
+        {
+            return $"Nadležni sud:\n{subjekt.sud_nadlezan.naziv}\n";
+        }
 
-            //Status
-            ispis += "\nStatus:\n";
-
+        private static string IspisiStatus(Subjekt subjekt)
+        {
+            string ispis = "\nStatus:\n";
             for (int i = 0; i < subjekt.postupci.Count; i++)
             {
                 ispis += $"{subjekt.postupci[i].vrsta.znacenje}\n";
             }
+            return ispis;
+        }
 
-            ispis += "\n";
-
-            // MBS i OIB
-            ispis += $"MBS:\n{subjekt.potpuni_mbs}\n\n";
+        private static string IspisiMbsOib(Subjekt subjekt)
+        {
+            string ispis = $"\nMBS:\n{subjekt.potpuni_mbs}\n\n";
             ispis += $"OIB:\n{subjekt.potpuni_oib}\n";
+            return ispis;
+        }
 
-            //Pravni oblik
-            ispis += "\nPravni oblik:\n";
-
+        private static string IspisiPravniOblik(Subjekt subjekt)
+        {
+            string ispis = "\nPravni oblik:\n";
             for (int i = 0; i < subjekt.pravni_oblici.Count; i++)
             {
                 ispis += $"{subjekt.pravni_oblici[i].vrsta_pravnog_oblika.naziv}\n";
             }
+            return ispis;
+        }
 
-            //Tvrtka
-            ispis += "\nTvrtka:\n";
-
+        private static string IspisiImeTvrtke(Subjekt subjekt)
+        {
+            string ispis = "\nTvrtka:\n";
             for (int i = 0; i < subjekt.tvrtke.Count; i++)
             {
                 ispis += $"{subjekt.tvrtke[i].ime}\n";
             }
+            return ispis;
+        }
 
-            //Temeljni kapital
+        private static string IspisiTemeljniKapital(Subjekt subjekt)
+        {
+            string ispis = "";
             if (subjekt.temeljni_kapitali != null)
             {
                 ispis += "\nTemeljni kapital:\n";
@@ -103,10 +124,12 @@ namespace SudskiRegistar
                     ispis += $"{subjekt.temeljni_kapitali[i].iznos} {subjekt.temeljni_kapitali[i].valuta.naziv}\n";
                 }
             }
-            
-            //Predmet poslovanja
-            ispis += "\nPredmeti poslovanja:\n";
+            return ispis;
+        }
 
+        private static string IspisiPredmetePoslovanja(Subjekt subjekt)
+        {
+            string ispis = "\nPredmeti poslovanja:\n";
             for (int i = 0; i < subjekt.predmeti_poslovanja.Count; i++)
             {
                 if (subjekt.predmeti_poslovanja[i].nac_klas_djelatnosti != null)
@@ -116,9 +139,8 @@ namespace SudskiRegistar
                 else
                 {
                     ispis += $"{subjekt.predmeti_poslovanja[i].djelatnost_tekst}\n";
-                }  
+                }
             }
-
             return ispis;
         }
     }
